@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "nY9DXZtLNoL5t1TscNhrzzNHlkKd8VKMoSgJcjTeRKA=",
+  "Source": "pinterestapi",
+  "BasePath": "_content/pinterestapi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

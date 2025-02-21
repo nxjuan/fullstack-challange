@@ -1,0 +1,37 @@
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+  api:
+    image: api:latest
+    build: .
+    container_name: scrapping_api
+    environment:
+      DB_CONNECTION_STRING: "Host=postgres;Port=5432;Database=db;Username=user;Password=password"
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_service
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "15432:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SESSION_TIMEOUT:
