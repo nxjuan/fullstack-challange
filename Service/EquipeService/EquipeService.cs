@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using pinterestapi.Config.DTOs.Post;
 using pinterestapi.DataContext;
 using pinterestapi.Model;
 using pinterestapi.Service.EquipeService;
@@ -15,17 +16,21 @@ public class EquipeService : IEquipeService
         _context = context;
     }
     
-    public async  Task<ServiceResponse<string>> CreateEquipe(EquipesModel equipe)
+    public async  Task<ServiceResponse<string>> CreateEquipe(EquipeDTO equipeDto)
     {
         var result = new ServiceResponse<string>();
         try
         {
-            await _context.Equipes.AddAsync(equipe);
+            EquipesModel newEquipe = new EquipesModel();
+            newEquipe.Nome = equipeDto.Nome;
+            newEquipe.Descricao = equipeDto.Descricao;
+                
+            await _context.Equipes.AddAsync(newEquipe);
             await _context.SaveChangesAsync();
             
             result.Success = true;
             result.Message = "Equipe cadastrado com sucesso!";
-            result.Data = equipe.Id.ToString();
+            result.Data = newEquipe.Id.ToString();
         }
         catch (Exception e)
         {
@@ -86,7 +91,7 @@ public class EquipeService : IEquipeService
         {
             var equipeList = await _context.Equipes.ToListAsync();
 
-            if (equipeList.Count < 1)
+            if (!equipeList.Any())
             {
                 result.Success = false;
                 result.Message = "Lista vazia";

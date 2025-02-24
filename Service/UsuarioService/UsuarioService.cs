@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using pinterestapi.Config.DTOs.Post;
 using pinterestapi.DataContext;
 using pinterestapi.Model;
 
@@ -13,15 +14,20 @@ public class UsuarioService : IUsuarioService
     {
         _context = context;
     }
-    public async Task<ServiceResponse<string>> CreateUsuario(UsuariosModel usuarioModel)
+    public async Task<ServiceResponse<string>> CreateUsuario(UsuarioDTO dto)
     {
         var response = new ServiceResponse<string>();
         try
         {
-            await _context.Usuarios.AddAsync(usuarioModel);
+            var newUsuario = new UsuariosModel();
+            newUsuario.Nome = dto.Nome;
+            newUsuario.Email = dto.Email;
+            newUsuario.Password = dto.Password;
+            
+            await _context.Usuarios.AddAsync(newUsuario);
             await _context.SaveChangesAsync();  
             
-            response.Data = usuarioModel.Id.ToString();
+            response.Data = newUsuario.Id.ToString();
             response.Message = "Usuario cadastrado com sucesso!";
             response.Success = true;
         }

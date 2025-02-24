@@ -1,6 +1,7 @@
 
 
 using Microsoft.EntityFrameworkCore;
+using pinterestapi.Config.DTOs.Post;
 using pinterestapi.DataContext;
 using pinterestapi.Model;
 
@@ -15,15 +16,22 @@ public class TarefaService : ITarefaService
         _context = context;
     }
     
-    public async Task<ServiceResponse<string>> CreateTarefa(TarefasModel tarefa)
+    public async Task<ServiceResponse<string>> CreateTarefa(TarefaDTO tarefaDto)
     {
         var response = new ServiceResponse<string>();
         try
         {
-            await _context.Tarefas.AddAsync(tarefa);
+            TarefasModel newTarefa = new TarefasModel();
+            newTarefa.Nome = tarefaDto.Nome;
+            newTarefa.Descricao = tarefaDto.Descricao;
+            newTarefa.ResponsavelId = tarefaDto.ResponsavelId;
+            newTarefa.Status = tarefaDto.Status;
+            newTarefa.ProjetoId = tarefaDto.ProjetoId;
+            
+            await _context.Tarefas.AddAsync(newTarefa);
             await _context.SaveChangesAsync();
             
-            response.Data = tarefa.Id.ToString();
+            response.Data = newTarefa.Id.ToString();
             response.Message = "Tarefa cadastrada com sucesso!";
             response.Success = true;
         }

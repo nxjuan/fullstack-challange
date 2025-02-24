@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using pinterestapi.Config.DTOs.Post;
 using pinterestapi.DataContext;
 using pinterestapi.Model;
 
@@ -14,15 +15,18 @@ public class ProjetoService : IProjetoService
         _context = context;
     }
     
-    public async Task<ServiceResponse<string>> CreateProjeto(ProjetosModel projetoModel)
+    public async Task<ServiceResponse<string>> CreateProjeto(ProjetoDTO projetoDto)
     {
         var response = new ServiceResponse<string>();
         try
         {
-            await _context.Projetos.AddAsync(projetoModel);
+            ProjetosModel newProjeto = new ProjetosModel();
+            newProjeto.Nome = projetoDto.Nome;
+            newProjeto.Descricao = projetoDto.Descricao;
+            await _context.Projetos.AddAsync(newProjeto);
             await _context.SaveChangesAsync();
             
-            response.Data = projetoModel.Id.ToString();
+            response.Data = newProjeto.Id.ToString();
             response.Success = true;
             response.Message = "Projeto Cadastrado com sucesso!";
         }

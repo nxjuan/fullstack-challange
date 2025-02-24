@@ -1,10 +1,11 @@
+using pinterestapi.Config.DTOs.Post;
 using pinterestapi.Model;
 
 namespace pinterestapi.Service.EquipeService;
 
 public interface IEquipeService
 {
-    Task<ServiceResponse<string>> CreateEquipe(EquipesModel equipe);
+    Task<ServiceResponse<string>> CreateEquipe(EquipeDTO equipeDto);
     Task<ServiceResponse<string>> UpdateEquipe(EquipesModel equipe, Guid id);
     Task<ServiceResponse<string>> DeleteEquipe(Guid id);
     Task<ServiceResponse<EquipesModel>> GetEquipe(Guid id);
