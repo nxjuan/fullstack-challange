@@ -112,20 +112,21 @@ public class EquipeService : IEquipeService
         try
         {
             var equipe = await _context.Equipes
-                .Include(e => e.Membros) // Garantir que Membros seja carregado
+                .Include(e => e.Membros) 
                 .FirstOrDefaultAsync(e => e.Id == equipeId);
-
             var usuario = await _context.Usuarios.FindAsync(usuarioId);
+
             if (equipe == null || usuario == null)
             {
+                result.Message = $"{(equipe == null ? $"Equipe null {equipeId}" : "")} {(usuario == null ? $"Usuario null {usuarioId}" : "")}".Trim();
                 result.Success = false;
-                result.Message = "Nenhum equipe ou usuario encontrados";
                 return result;
             }
             
+            
             equipe.Membros ??= new List<UsuariosModel>();
 
-            if (equipe.Membros.Any(m => m.Id == usuarioId))
+            if (equipe.Membros.All(m => m.Id == usuarioId))
             {
                 equipe.Membros.Add(usuario);
                 await _context.SaveChangesAsync();

@@ -37,18 +37,22 @@ public class EquipeController : ControllerBase
     public async Task<IActionResult> CreateEquipe(EquipesModel equipe)
     {
         var response = await _interface.CreateEquipe(equipe);
-        return response.Success ? Ok(response) : NotFound(response);
+        return response.Success ? Ok(response) : BadRequest(response);
     }
     
     [HttpPost("addmember")]
-    public async Task<IActionResult> AddMember(Guid equipeId, Guid usuarioId){
-        var response = await _interface.AddMember(equipeId, usuarioId);
-        return response.Success ? Ok(response) : NotFound(response);
+    public async Task<IActionResult> AddMember([FromBody] MembroEquipe request)
+    {
+        if (request == null || request.EquipeId == Guid.Empty || request.MembroId == Guid.Empty)
+            return BadRequest($"Dados inválidos. Equipe: {request.EquipeId}, Membro: {request.MembroId}");
+
+        var response = await _interface.AddMember(request.EquipeId, request.MembroId);
+        return response.Success ? Ok(response) : BadRequest(response);
     }
     
     [HttpDelete("removemember")]
     public async Task<IActionResult> RemoveMember(Guid membroEquipeId){
         var response = await _interface.RemoveMember(membroEquipeId);
-        return response.Success ? Ok(response) : NotFound(response);
+        return response.Success ? Ok(response) : BadRequest(response);
     }
 }
