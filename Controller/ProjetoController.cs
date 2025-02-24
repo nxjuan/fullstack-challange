@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using pinterestapi.Config.DTOs.Post;
 using pinterestapi.DataContext;
 using pinterestapi.Model;
 using pinterestapi.Service.ProjetoService;
@@ -33,7 +34,7 @@ public class ProjetoController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProjeto(ProjetosModel projeto)
+    public async Task<IActionResult> CreateProjeto(ProjetoDTO projeto)
     {
         var result = await _projetoService.CreateProjeto(projeto);
         return result.Success ? Ok(result) : BadRequest(result);

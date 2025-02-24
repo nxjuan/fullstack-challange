@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using pinterestapi.Config.DTOs.Post;
 using pinterestapi.DataContext;
 using pinterestapi.Model;
 using pinterestapi.Service.TarefaService;
@@ -33,9 +34,9 @@ public class TarefaController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTarefa(TarefasModel tarefa)
+    public async Task<IActionResult> CreateTarefa(TarefaDTO dto)
     {
-        var result = await _tarefaService.CreateTarefa(tarefa);
+        var result = await _tarefaService.CreateTarefa(dto);
         return result.Success ? Ok(result) : BadRequest(result);
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using pinterestapi.Config.DTOs.Post;
 using pinterestapi.DataContext;
 using pinterestapi.Model;
 using pinterestapi.Service.Equipes;
@@ -34,7 +35,7 @@ public class EquipeController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateEquipe(EquipesModel equipe)
+    public async Task<IActionResult> CreateEquipe(EquipeDTO equipe)
     {
         var response = await _interface.CreateEquipe(equipe);
         return response.Success ? Ok(response) : BadRequest(response);

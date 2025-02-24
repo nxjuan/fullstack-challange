@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using pinterestapi.Config.DTOs.Post;
 using pinterestapi.Model;
 using pinterestapi.Service.UsuarioService;
 
@@ -16,9 +17,9 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUsuario(UsuariosModel usuarioModel)
+    public async Task<IActionResult> CreateUsuario(UsuarioDTO dto)
     {
-        var resp = await _usuarioService.CreateUsuario(usuarioModel);
+        var resp = await _usuarioService.CreateUsuario(dto);
         return resp.Success ? Ok(resp) : BadRequest(resp);
     }
 
