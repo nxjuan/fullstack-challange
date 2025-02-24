@@ -1,0 +1,34 @@
+# 🛑 Ignorar binários e compilações do .NET
+bin/
+obj/
+*.pdb
+*.exe
+*.dll
+*.cache
+*.FileListAbsolute.txt
+*.sourcelink.json
+
+# 🛑 Ignorar arquivos do Entity Framework
+Migrations/
+**/Migrations/
+*.mdf
+*.ldf
+*.db
+data/
+data/**
+
+# 🛑 Ignorar configurações sensíveis
+appsettings.json
+appsettings.Development.json
+secrets.json
+
+# 🛑 Ignorar arquivos de log
+*.log
+logs/
+logs/**
+
+# 🛑 Ignorar arquivos Docker temporários
+docker-compose.override.yml
+**/docker-entrypoint-initdb.d/
+.env
+.envrc
