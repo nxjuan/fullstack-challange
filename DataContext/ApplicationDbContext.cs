@@ -5,8 +5,7 @@ namespace pinterestapi.DataContext;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public DbSet<PostModel> Posts { get; set; }
-    
+   
     public DbSet<UsuariosModel> Usuarios { get; set; }
     
     public DbSet<EquipesModel> Equipes { get; set; }
