@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace pinterestapi.Model;
 
@@ -14,5 +15,6 @@ public class EquipesModel
     [StringLength(2083)]
     public string Descricao { get; set; } = string.Empty;
     
-    public ICollection<UsuariosModel>? Membros { get; set; }
+    [JsonInclude]
+    public ICollection<MembroEquipe>? MembroEquipe { get; set; }
 }

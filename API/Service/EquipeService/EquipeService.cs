@@ -89,7 +89,10 @@ public class EquipeService : IEquipeService
 
         try
         {
-            var equipeList = await _context.Equipes.ToListAsync();
+            var equipeList = await _context.Equipes
+                .Include(e => e.MembroEquipe)
+                    .ThenInclude(me => me.Membro)
+                .ToListAsync();
 
             if (!equipeList.Any())
             {
@@ -116,9 +119,7 @@ public class EquipeService : IEquipeService
         var result = new ServiceResponse<string>();
         try
         {
-            var equipe = await _context.Equipes
-                .Include(e => e.Membros) 
-                .FirstOrDefaultAsync(e => e.Id == equipeId);
+            var equipe = await _context.Equipes.FindAsync(equipeId);
             var usuario = await _context.Usuarios.FindAsync(usuarioId);
 
             if (equipe == null || usuario == null)
@@ -127,17 +128,25 @@ public class EquipeService : IEquipeService
                 result.Success = false;
                 return result;
             }
-            
-            
-            equipe.Membros ??= new List<UsuariosModel>();
+            var membroExiste = await _context.MembroEquipe.AnyAsync(me => me.EquipeId == equipeId && me.MembroId == usuarioId);
 
-            if (equipe.Membros.All(m => m.Id == usuarioId))
+            if (membroExiste)
             {
-                equipe.Membros.Add(usuario);
-                await _context.SaveChangesAsync();
-                result.Success = true;
-                result.Message = "Usuario adicionado à equipe";
+                result.Success = false;
+                result.Message = "Usuario já existe nessa equipe";
+                return result;
             }
+            var novoMembroEquipe = new MembroEquipe
+            {
+                MembroId = usuarioId,
+                Membro = usuario,
+                EquipeId = equipeId,
+                Equipes = equipe,
+            };
+            _context.MembroEquipe.Add(novoMembroEquipe);
+            await _context.SaveChangesAsync();
+            result.Success = true;
+            result.Message = "Membro equipe cadastrada com sucesso!";
         }
         catch (Exception e)
         {

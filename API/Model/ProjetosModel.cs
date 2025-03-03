@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using GiraChallange.domain.enums;
 
 namespace pinterestapi.Model;
@@ -17,5 +18,6 @@ public class ProjetosModel
     public DateTime DataFim { get; set; }
     public StatusEnum Status { get; set; }
     
+    [JsonInclude]
     public ICollection<TarefasModel>? Tarefas { get; set; }
 }

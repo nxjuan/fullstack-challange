@@ -42,7 +42,7 @@ public class EquipeController : ControllerBase
     }
     
     [HttpPost("addmember")]
-    public async Task<IActionResult> AddMember([FromBody] MembroEquipe request)
+    public async Task<IActionResult> AddMember([FromBody] MembroEquipeDto request)
     {
         if (request == null || request.EquipeId == Guid.Empty || request.MembroId == Guid.Empty)
             return BadRequest($"Dados inválidos. Equipe: {request.EquipeId}, Membro: {request.MembroId}");

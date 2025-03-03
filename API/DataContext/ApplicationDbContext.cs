@@ -11,6 +11,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<EquipesModel> Equipes { get; set; }
     public DbSet<ProjetosModel> Projetos { get; set; }
     public DbSet<TarefasModel> Tarefas { get; set; }
+    public DbSet<MembroEquipe> MembroEquipe { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,14 +28,20 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .OnDelete(DeleteBehavior.Cascade);
         
         // ========= tabela intermediaria: usuario -> membroEquipe <- equipe
-        modelBuilder.Entity<UsuariosModel>()
-            .HasMany(u => u.Equipes)
-            .WithMany(e => e.Membros)
-            .UsingEntity<Dictionary<string, object>>(
-                "MembrosEquipe",
-                j => j.HasOne<EquipesModel>().WithMany().HasForeignKey("EquipeId"),
-                j => j.HasOne<UsuariosModel>().WithMany().HasForeignKey("UsuarioId")
-            );
+        
+        modelBuilder.Entity<MembroEquipe>()
+            .HasKey(me => new { me.MembroId, me.EquipeId });
+
+        modelBuilder.Entity<MembroEquipe>()
+            .HasOne(me => me.Membro)
+            .WithMany(u => u.MembroEquipe)
+            .HasForeignKey(me => me.MembroId);
+
+        modelBuilder.Entity<MembroEquipe>()
+            .HasOne(me => me.Equipes)
+            .WithMany(e => e.MembroEquipe)
+            .HasForeignKey(me => me.EquipeId);
+   
 
 
         modelBuilder.Entity<ProjetosModel>()
