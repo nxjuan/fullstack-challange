@@ -14,7 +14,9 @@ services:
 
   api:
     image: api:latest
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile 
     container_name: scrapping_api
     environment:
       DB_CONNECTION_STRING: "Host=postgres;Port=5432;Database=db;Username=user;Password=password"
